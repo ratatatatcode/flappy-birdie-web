@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Canvas from "./canvas";
 import Image from "next/image";
 
@@ -10,20 +10,24 @@ const randomGenerator = (min: number, max: number) =>
 export default function GameComponent() {
   // Game Function:
   const [isPaused, setIsPaused] = useState(true);
+  const [score, setScore] = useState(0);
+  const birdRef = useRef<HTMLImageElement | null>(null);
+  const pipeRef = useRef<HTMLDivElement | null>(null);
 
   // Bird related movement:
   const [velocity, setVelocity] = useState(0);
-  const gravity = 9;
+  const gravity = 10;
   const [rotate, setRotate] = useState(0);
 
   // Pipe related:
+  // const [pipeRef] = useRef(null);
   const [pipeMovement, setPipeMovement] = useState(0);
   // [upper-h (0), lower-h (1)]
   // (Inconsistent gap between pipes)
   const [pipeArr] = useState<number[][]>(() =>
     [...Array(100)].map(() => {
       const upper = randomGenerator(20, 400);
-      const lower = 512 - upper - 150;
+      const lower = 512 - upper - 140;
       return [upper, lower];
     }),
   );
@@ -40,6 +44,10 @@ export default function GameComponent() {
       return () => clearInterval(intervalId);
     }
   }, [isPaused]);
+
+  // Scoring and collision:
+  // Bird's position: 501.3636169433594
+  useEffect(() => {}, []);
 
   // Spacebar Movement:
   const handleKeyPress = (e: KeyboardEvent) => {
@@ -61,8 +69,8 @@ export default function GameComponent() {
   return (
     <Canvas>
       {/* Menu */}
-      <div className="p-4 absolute">
-        <h2 className="text-white">Score:</h2>
+      <div className="p-4 absolute z-50">
+        <h2 className="text-white">Score: {score}</h2>
         {isPaused && (
           <button
             className="text-white border px-2"
@@ -83,6 +91,7 @@ export default function GameComponent() {
         alt="Flappy Birdie"
         height={36}
         width={48}
+        ref={birdRef}
       />
 
       {/* Pipe */}
