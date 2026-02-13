@@ -1,4 +1,4 @@
-import GameComponent from "@/components/game";
+import GameComponent from '@/components/game';
 
 export default function Home() {
   return (
