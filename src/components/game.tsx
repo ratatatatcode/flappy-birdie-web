@@ -1,5 +1,3 @@
-'use client';
-
 import Canvas from './canvas';
 import Bird from './bird';
 import Board from './board';
