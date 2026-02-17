@@ -14,7 +14,7 @@ export default function Pipe() {
     const createPipeArr = async () => {
       setPipes(() => {
         return new Array(pipeSize).fill(null).map(() => {
-          const y_pos = randomGenerator(-80, 180);
+          const y_pos = randomGenerator(-60, 160);
           // y_position, scored?
           return [y_pos, false];
         });
