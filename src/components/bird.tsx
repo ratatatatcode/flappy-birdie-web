@@ -1,12 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 export default function Bird() {
+  // get bird's position
+  // const birdRef = useRef<HTMLImageElement | null>(null);
+
+  //
   const [position, setPosition] = useState(0);
   const [, setVelocity] = useState(5);
-  const gravity = 0.9; // Falling rate
+  const gravity = 0.9; // falling rate
   const jumpForce = 8;
   const [bodyRotation, setBodyRotation] = useState(20);
 
@@ -14,6 +18,13 @@ export default function Bird() {
   // position += velocity
   useEffect(() => {
     const intervalId = setInterval(() => {
+      /* if (birdRef.current) {
+        const birdRect = birdRef.current.getBoundingClientRect();
+        console.log(birdRect.x);
+        // output: 498.0970153808594
+      }
+      */
+
       setVelocity((v) => {
         const newV = v + gravity;
         setPosition((p) => p + newV);
@@ -50,6 +61,7 @@ export default function Bird() {
       alt="Bird"
       className="absolute top-[50%] left-[20%] z-40"
       style={{ transform: `translateY(${position}px) rotate(${bodyRotation}deg)` }}
+      // ref={birdRef}
     ></Image>
   );
 }
