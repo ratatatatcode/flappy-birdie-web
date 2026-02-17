@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-export default function Pipe() {
+export default function Pipe({ addScore }: { addScore: () => void }) {
   const randomGenerator = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min) + min);
 
+  const [curr, setCurrent] = useState(0);
   const pipeSize = 100;
   const [pipes, setPipes] = useState(new Array(pipeSize));
   const [pipeMovement, setPipeMovement] = useState(0);
+  const pipesRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     const createPipeArr = async () => {
@@ -27,10 +29,17 @@ export default function Pipe() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setPipeMovement((m) => m + 5);
+
+      const currentPipe = pipesRef.current[curr];
+      const currentPipeRect = currentPipe.getBoundingClientRect();
+      if (currentPipeRect.x < 465) {
+        setCurrent((c) => c + 1);
+        addScore();
+      }
     }, 50);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [curr, addScore]);
 
   return (
     <div className="absolute left-full flex h-full w-full gap-40">
@@ -39,6 +48,9 @@ export default function Pipe() {
           key={idx}
           className="flex flex-col items-center justify-center gap-38"
           style={{ transform: `translateX(-${pipeMovement}px)` }}
+          ref={(el) => {
+            if (el) pipesRef.current[idx] = el;
+          }}
         >
           <img
             src={'/assets/top-pipe.png'}
